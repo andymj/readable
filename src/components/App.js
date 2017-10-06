@@ -1,37 +1,60 @@
-import React, { Component } from 'react';
-import logo from '../logo.svg';
-import '../App.css';
+import React, { Component } from "react";
+import logo from "../logo.svg";
+import "../App.css";
+import * as readableAPI from "../utils/readableAPI";
+import { connect } from 'react-redux'
+
+import { getPosts } from '../actions';
 
 class App extends Component {
-  state = {
-    posts: null
-  }
-  componentDidMount() {
-    fetch("http://localhost:3001/posts", { 
-      method: 'GET', 
-      headers: { Authorization: "whatever-you-want" },
-      credentials: 'include'
-    })
-      .then(response => {
-        this.setState({
-          posts: response
-        })
-        console.log(response);
-      });
-  }
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+	
+	state = {
+		posts: null
+	}
+	
+	componentDidMount() {
+		readableAPI.getAllPosts()
+		.then((response) => {
+			this.props.fetchPosts(response)
+			return;
+		});
+	}
+
+	// mapStateToProps(state, props) {
+	// 	this.props = { state }
+	// }
+	render() {
+		const posts = this.props.posts;
+		console.log(posts);
+		return (
+		<div className="App">
+			<section>
+			{!!posts ? (
+				posts.map(post => (
+					<article key={post.id}>
+						<header> 
+							<h2>{post.title}</h2>
+							<div>by <span>{post.author}</span> | <span>{post.timestamp}</span> | <span>{post.category}</span></div>
+						</header>
+						<p>{post.body}</p>
+					</article>))
+			) : (
+				"nothing here"
+			)}
+			</section>
+		</div>
+		);
+	}
 }
 
-export default App;
+function mapStateToProps(state) {
+	return { posts: state.posts };
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		fetchPosts: (posts) => dispatch(getPosts(posts))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
