@@ -4,25 +4,14 @@ import "../App.css";
 import * as readableAPI from "../utils/readableAPI";
 import { connect } from 'react-redux'
 
-import { getPosts } from '../actions';
+import { getPosts, getCategories } from '../actions';
 
 class App extends Component {
 	
 	state = {
 		posts: null
 	}
-	
-	componentDidMount() {
-		readableAPI.getAllPosts()
-		.then((response) => {
-			this.props.fetchPosts(response)
-			return;
-		});
-	}
 
-	// mapStateToProps(state, props) {
-	// 	this.props = { state }
-	// }
 	render() {
 		const posts = this.props.posts;
 		console.log(posts);
@@ -30,7 +19,7 @@ class App extends Component {
 		<div className="App">
 			<section>
 			{!!posts ? (
-				posts.map(post => (
+				[...posts].map(post => (
 					<article key={post.id}>
 						<header> 
 							<h2>{post.title}</h2>
@@ -39,7 +28,7 @@ class App extends Component {
 						<p>{post.body}</p>
 					</article>))
 			) : (
-				"nothing here"
+				"Loading ..."
 			)}
 			</section>
 		</div>
@@ -51,10 +40,4 @@ function mapStateToProps(state) {
 	return { posts: state.posts };
 }
 
-function mapDispatchToProps(dispatch) {
-	return {
-		fetchPosts: (posts) => dispatch(getPosts(posts))
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);

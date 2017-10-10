@@ -18,3 +18,7 @@ function get(url, headers) {
 export function getAllPosts() {
     return get(`${url}/${posts}`, headers);
 }
+
+export function getCategories() {
+    return get(`${url}/${categories}`, headers);
+}
