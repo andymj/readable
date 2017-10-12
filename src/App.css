@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
 
 .App-logo {
@@ -21,4 +24,91 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+h1 {
+  background: #292b2e;
+  color: #ffffff;
+  margin: 0;
+  padding: 20px;
+}
+
+.categories {
+	height: 100vh;
+	border-right: 1px solid rgb(80, 79, 79);
+	padding: 10px 15px 0;
+}
+
+.categories h2 {
+	text-align: left;
+}
+
+.categories section {
+	margin-bottom: 40px;
+}
+
+.categories ul {
+	padding-left: 20px;
+	text-align: left;
+}
+
+.categories ul li {
+	padding: 5px 0;
+}
+
+.categories a {
+	color: #034766;
+	text-decoration: none;
+}
+
+.categories a:hover {
+	text-decoration: underline;
+}
+
+.posts {
+	padding: 10px 15px 0;
+	flex-grow: 2;
+	text-align: left;
+}
+
+.posts article:nth-child(even)  {
+	background-color: #ebf5fa;
+}
+
+.posts article {
+	padding: 20px;
+}
+
+.post-header {
+	margin-bottom: 30px;
+}
+
+.post-title {
+	margin-bottom: 8px;
+}
+
+.post-title a {
+	color: #034766;
+	text-decoration: none;
+}
+
+.post-title a:hover {
+	text-decoration: underline;
+}
+
+.post-info {
+	font-size: 14px;
+}
+
+.post-info span {
+	padding: 0 15px;
+	border-right: 1px solid black;
+}
+
+.post-info span:first-child {
+	padding-left: 0;
+}
+
+.post-info span:last-child {
+	border-right: none;
 }
