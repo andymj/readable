@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 import { GET_POSTS, GET_CATEGORIES, SORT_BY_DATE, SORT_BY_VOTES } from '../actions';
 
 const initialPosts = null;
@@ -29,5 +30,6 @@ function categories(state=null, action) {
 
 export default combineReducers({
     posts,
-    categories
+    categories,
+    router: routerReducer
 })
