@@ -4,6 +4,7 @@ export const GET_POSTS = 'GET_POSTS';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const SORT_BY_DATE = 'SORT_BY_DATE';
 export const SORT_BY_VOTES = 'SORT_BY_VOTES';
+export const GET_POST_COMMENTS = 'GET_POST_COMMENTS';
 
 export const getPosts = (posts) => ({
     type: GET_POSTS,
@@ -19,6 +20,19 @@ export const sortByVotes = (posts) => ({
     type: SORT_BY_VOTES,
     posts
 })
+
+export const getPostComments = (comments) => ({
+    type: GET_POST_COMMENTS,
+    comments
+})
+
+export function fetchPostComments(postId) {
+    return (dispatch) => {
+        readableAPI.getPostComments(postId).then(response => {
+            dispatch(getPostComments(response));
+        });
+    }
+}
 
 export const getCategories = (categories) => ({
     type: GET_CATEGORIES,

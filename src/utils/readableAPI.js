@@ -1,7 +1,6 @@
 const url = 'http://localhost:3001';
 const posts = 'posts';
 const categories = 'categories';
-const comments = 'comments';
 
 let headers = {
     Accept: 'application/json',
@@ -21,4 +20,12 @@ export function getAllPosts() {
 
 export function getCategories() {
     return get(`${url}/${categories}`, headers);
+}
+
+export function getAllCategoryPosts(category) {
+    return get(`${url}/${category}/posts`, headers);
+}
+
+export function getPostComments(postId) {
+    return get(`${url}/posts/${postId}/comments`, headers);
 }

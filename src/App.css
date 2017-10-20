@@ -28,9 +28,13 @@
 
 h1 {
   background: #292b2e;
-  color: #ffffff;
   margin: 0;
   padding: 20px;
+}
+
+h1 a {
+	color: #ffffff;
+	text-decoration: none;
 }
 
 .categories {
@@ -65,7 +69,7 @@ h1 {
 	text-decoration: underline;
 }
 
-.posts {
+.posts, .post-wrapper {
 	padding: 10px 15px 0;
 	flex-grow: 2;
 	text-align: left;
@@ -75,8 +79,12 @@ h1 {
 	background-color: #ebf5fa;
 }
 
-.posts article {
+article {
 	padding: 20px;
+}
+
+.post-wrapper {
+	margin-top: 10px;
 }
 
 .post-header {
@@ -85,6 +93,10 @@ h1 {
 
 .post-title {
 	margin-bottom: 8px;
+}
+
+.single-post .post-title {
+	text-align: center;
 }
 
 .post-title a {
@@ -97,19 +109,25 @@ h1 {
 }
 
 .post-info {
-	font-size: 14px;
+	font-size: 13px;
+	color: gray;
 }
 
-.post-info span {
+.comment-info {
+	font-size: 13px;
+	color: gray;
+}
+
+.post-info span, .comment-info span {
 	padding: 0 15px;
-	border-right: 1px solid black;
+	border-right: 1px solid gray;
 }
 
-.post-info span:first-child {
+.post-info span:first-child, .comment-info span:first-child {
 	padding-left: 0;
 }
 
-.post-info span:last-child {
+.post-info span:last-child, .comment-info span:last-child {
 	border-right: none;
 }
 
@@ -121,7 +139,7 @@ h1 {
 	font-size: 16px;
 	text-decoration: none;
 	color: rgb(175, 4, 4);
-	transition: font-weight 0.4s ease-out;
+	transition: font-weight 0.1s ease-out;
 }
 
 .add-new-post:hover {
@@ -131,4 +149,22 @@ h1 {
 .plus-icon {
 	font-size: 22px;
 	padding-left: 5px;
+}
+
+.body-footer {
+	margin-top: 30px;
+}
+
+.comments {
+	margin-top: 100px;
+}
+
+.comment {
+	padding: 2%;
+	margin-top: 10px;
+	border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.comment-body {
+	font-size: 13px;
 }

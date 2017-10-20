@@ -5,12 +5,12 @@ import './index.css';
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import { Provider } from 'react-redux';
 
 import createHistory from 'history/createBrowserHistory';
 
-import { ConnectedRouter, routerMiddleware, push } from 'react-router-redux'
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
 
 import reducer from './reducers';
 import thunkMiddleware from "redux-thunk";
