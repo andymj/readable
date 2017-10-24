@@ -5,7 +5,8 @@ import {
     GET_CATEGORIES, 
     SORT_BY_DATE, 
     SORT_BY_VOTES,
-    GET_POST_COMMENTS } from '../actions';
+    GET_POST_COMMENTS,
+    UPDATE_POST } from '../actions';
 
 const initialPosts = null;
 
@@ -18,6 +19,12 @@ function posts(state=initialPosts, action) {
             return [...posts].sort((a, b) => ( b.timestamp - a.timestamp));
         case SORT_BY_VOTES :
             return [...posts].sort((a, b) => ( b.voteScore - a.voteScore));
+        case UPDATE_POST :
+            const { post } = action;
+            return {
+                ...state,
+                "voteScore": post.voteScore
+            }
         default :
             return state;
     }

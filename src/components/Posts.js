@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-
 import { Link } from 'react-router-dom';
-
 import { connect } from 'react-redux';
+
+import { updatePostVotes } from '../actions'
+
 import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
 
 class Posts extends Component {
+    updateVote(vote, postId) {
+        this.props.submitVote(vote, postId);
+    }
     render() {
         let { posts } = this.props;
         const category = this.props.match.params.category;
@@ -26,14 +30,15 @@ class Posts extends Component {
                             </h3>
                             <div className="post-info">
                                 <span>by: {post.author}</span>
-                                <span>
-                                    Created: {moment(post.timestamp).calendar()}
-                                </span>
-                                <span>Category: {post.category}</span>
-                                <span>Votes: {post.voteScore}</span>
+                                <span>Votes: {post.voteScore} <button onClick={() => this.updateVote('upVote', post.id)} className="increment-vote">+</button><button onClick={() => this.updateVote('downVote', post.id)} className="decrease-vote">-</button></span>
                             </div>
                         </header>
                         <p className="post-body">{body}</p>
+                        <footer className="post-info">
+                            <span>Created: {moment(post.timestamp).calendar()}</span>
+                            <span>Category: #{post.category}</span>
+                            <span>Total comments: {post.commentCount}</span>
+                        </footer>
                     </article>;
                 }) : "Loading ..."}
             </section>
@@ -47,4 +52,10 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Posts);
+function mapDispatchToProps(dispatch) {
+    return {
+        submitVote: (vote, postId) => dispatch(updatePostVotes(vote, postId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Posts);

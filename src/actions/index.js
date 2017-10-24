@@ -4,7 +4,8 @@ export const GET_POSTS = 'GET_POSTS';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const SORT_BY_DATE = 'SORT_BY_DATE';
 export const SORT_BY_VOTES = 'SORT_BY_VOTES';
-export const GET_POST_COMMENTS = 'GET_POST_COMMENTS';
+export const GET_POST_COMMENTS = 'GET_POST_COMMENTS'
+export const UPDATE_POST = 'UPDATE_POST';
 
 export const getPosts = (posts) => ({
     type: GET_POSTS,
@@ -43,6 +44,21 @@ export function fetchPosts() {
     return (dispatch) => {
         readableAPI.getAllPosts().then(response => {
             dispatch(getPosts(response));
+        });
+    }
+}
+
+export const updatePost = (post) => ({
+    type: UPDATE_POST,
+    post
+})
+
+
+export function updatePostVotes(vote, postId) {
+    return (dispatch) => {
+        readableAPI.updateVote(vote, postId).then(response => {
+            console.log('post', response);
+            dispatch(updatePost(response));
         });
     }
 }
