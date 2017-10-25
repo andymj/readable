@@ -15,7 +15,7 @@ function get(url) {
 }
 
 function post(url, option) {
-    return fetch(url, { method: 'POST', headers, body: { option } })
+    return fetch(url, { method: 'POST', headers, body: JSON.stringify({ option }) })
         .then( res => res.json())
         .then(data => data);
 }

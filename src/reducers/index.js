@@ -21,10 +21,14 @@ function posts(state=initialPosts, action) {
             return [...posts].sort((a, b) => ( b.voteScore - a.voteScore));
         case UPDATE_POST :
             const { post } = action;
-            return {
-                ...state,
-                "voteScore": post.voteScore
-            }
+            return [
+                ...state.map((item) => {
+                    if(item.id === post.id) {
+                        item.voteScore = post.voteScore;
+                    }
+                    return item;
+                }).filter(post => post.deleted === false).sort((a, b) => (b.voteScore - a.voteScore))
+            ]
         default :
             return state;
     }

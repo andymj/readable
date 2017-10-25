@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchPostComments } from '../actions';
+import { fetchPostComments, updatePostVotes } from '../actions';
 
 import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
 
 class Post extends Component {
-
+    updateVote(vote, postId) {
+        this.props.submitVote(vote, postId);
+    }
     componentDidMount() {
         const postId = this.props.match.params.postId;
         this.props.getComments(postId);
@@ -25,7 +27,7 @@ class Post extends Component {
                         <h2 className="post-title">{ post.title }</h2>
                         <div className="post-info">
                             <span>by: {post.author}</span>
-                            <span>Votes: {post.voteScore}</span>
+                            <span>Votes: {post.voteScore} <button onClick={() => this.updateVote('upVote', post.id)} className="increment-vote">+</button><button onClick={() => this.updateVote('downVote', post.id)} className="decrease-vote">-</button></span>
                         </div>
                     </header>
                     <section>{post.body}</section>
@@ -63,7 +65,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getComments: (postId) => dispatch(fetchPostComments(postId))
+        getComments: (postId) => dispatch(fetchPostComments(postId)),
+        submitVote: (vote, postId) => dispatch(updatePostVotes(vote, postId))
     }
 }
 
