@@ -6,7 +6,8 @@ import {
     SORT_BY_DATE, 
     SORT_BY_VOTES,
     GET_POST_COMMENTS,
-    UPDATE_POST } from '../actions';
+    UPDATE_POST,
+    UPDATE_COMMENT } from '../actions';
 
 const initialPosts = null;
 
@@ -49,6 +50,16 @@ function comments(state=[], action) {
         case GET_POST_COMMENTS :
             const { comments } = action
             return [...comments].sort((a, b) => (b.voteScore - a.voteScore));
+        case UPDATE_COMMENT :
+            const { comment } = action;
+            return [
+                ...state.map((item)=> {
+                    if( item.id === comment.id) {
+                        item.voteScore = comment.voteScore;
+                    }
+                    return item;
+                }).sort((a, b) => (b.voteScore - a.voteScore))
+            ];
         default :
             return state;
     }

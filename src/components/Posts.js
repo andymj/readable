@@ -30,7 +30,7 @@ class Posts extends Component {
                             </h3>
                             <div className="post-info">
                                 <span>by: {post.author}</span>
-                                <span>Votes: {post.voteScore} <button onClick={() => this.updateVote('upVote', post.id)} className="increment-vote">+</button><button onClick={() => this.updateVote('downVote', post.id)} className="decrease-vote">-</button></span>
+                                <span>Votes: {post.voteScore} <button onClick={() => this.updateVote('downVote', post.id)} className="decrease-vote">-</button><button onClick={() => this.updateVote('upVote', post.id)} className="increment-vote">+</button></span>
                             </div>
                         </header>
                         <p className="post-body">{body}</p>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchPostComments, updatePostVotes } from '../actions';
+import { fetchPostComments, updatePostVotes, updateCommentVotes } from '../actions';
 
 import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
@@ -9,6 +9,9 @@ import 'moment/min/locales.min';
 class Post extends Component {
     updateVote(vote, postId) {
         this.props.submitVote(vote, postId);
+    }
+    updateCommentVote(vote, commentId) {
+        this.props.submitCommentVote(vote, commentId);
     }
     componentDidMount() {
         const postId = this.props.match.params.postId;
@@ -27,7 +30,7 @@ class Post extends Component {
                         <h2 className="post-title">{ post.title }</h2>
                         <div className="post-info">
                             <span>by: {post.author}</span>
-                            <span>Votes: {post.voteScore} <button onClick={() => this.updateVote('upVote', post.id)} className="increment-vote">+</button><button onClick={() => this.updateVote('downVote', post.id)} className="decrease-vote">-</button></span>
+                            <span>Votes: {post.voteScore} <button onClick={() => this.updateVote('downVote', post.id)} className="decrease-vote">-</button><button onClick={() => this.updateVote('upVote', post.id)} className="increment-vote">+</button></span>
                         </div>
                     </header>
                     <section>{post.body}</section>
@@ -42,7 +45,7 @@ class Post extends Component {
                                 <div className="comment-info">
                                     <span>by: {comment.author}</span>
                                     <span>Created: {moment(comment.timestamp).calendar()}</span>
-                                    <span>Votes: {comment.voteScore}</span>
+                                    <span>Votes: {comment.voteScore} <button onClick={() => this.updateCommentVote('downVote', comment.id)} className="decrease-vote">-</button><button onClick={() => this.updateCommentVote('upVote', comment.id)} className="increment-vote">+</button></span>
                                 </div>
                                 <p className="comment-body">{comment.body}</p>
                             </div>
@@ -66,7 +69,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         getComments: (postId) => dispatch(fetchPostComments(postId)),
-        submitVote: (vote, postId) => dispatch(updatePostVotes(vote, postId))
+        submitVote: (vote, postId) => dispatch(updatePostVotes(vote, postId)),
+        submitCommentVote: (vote, commentId) => dispatch(updateCommentVotes(vote, commentId))
     }
 }
 

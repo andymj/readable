@@ -22,7 +22,7 @@ class Sidenav extends Component {
                     </ul>
                 </section>
                 <section>
-                    {this.props.posts && this.props.posts.length > 0 &&
+                    {this.props.posts && this.props.posts.length > 1 &&
                     <nav> 
                         <h2>Sort by</h2>
                         <ul className="order-by">

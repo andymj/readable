@@ -39,3 +39,7 @@ export function getPostComments(postId) {
 export function updateVote(vote, postId) {
     return post(`${url}/posts/${postId}`, vote);
 }
+
+export function updateCommentVote(vote, commentId) {
+    return post(`${url}/comments/${commentId}`, vote);
+}
