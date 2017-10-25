@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'react-modal'
+import uuidv4 from 'uuid/v4';
 
 import { fetchPostComments, updatePostVotes, updateCommentVotes } from '../actions';
 
