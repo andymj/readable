@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Modal from 'react-modal'
 
 import { fetchPostComments, updatePostVotes, updateCommentVotes } from '../actions';
 
@@ -7,6 +8,9 @@ import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
 
 class Post extends Component {
+    state = {
+        commentsModalOpen: false
+    }
     updateVote(vote, postId) {
         this.props.submitVote(vote, postId);
     }
@@ -17,7 +21,14 @@ class Post extends Component {
         const postId = this.props.match.params.postId;
         this.props.getComments(postId);
     }
+    showCommentModal() {
+        this.setState({ commentsModalOpen: true });
+    }
+    closeCommentsModal(){
+        this.setState({ commentsModalOpen: false });
+    }
     render() {
+        const { commentsModalOpen } = this.state;
         const { posts, comments } = this.props;
         const postId = this.props.match.params.postId;
         const post = posts ? posts.filter(post => post.id === postId).pop() : '';
@@ -39,6 +50,7 @@ class Post extends Component {
                         <span>Category: #{post.category}</span>
                     </div>
                     <div className="comments">
+                        <button className="newComment" onClick={() => this.showCommentModal()}>Add a new comment +</button>
                         { comments.length > 0 && <h3 className="comments-title">Comments</h3>}
                         { comments.length > 0 && comments.map( comment => (
                             <div className="comment" key={comment.id}>
@@ -54,6 +66,14 @@ class Post extends Component {
                     </div>
                 </article>
             }
+            <Modal
+                className='modal'
+                overlayClassName='overlay'
+                isOpen={commentsModalOpen}
+                onRequestClose={this.closeCommentsModal}
+                contentLabel='Modal'>
+                <button className="closeModal" onClick={() => this.closeCommentsModal()}>X</button>
+            </Modal>
             </div>
         );
     }
