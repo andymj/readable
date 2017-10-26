@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import Modal from 'react-modal'
 import uuidv4 from 'uuid/v4';
 
-import { fetchPostComments, updatePostVotes, updateCommentVotes } from '../actions';
+import { fetchPostComments, updatePostVotes, updateCommentVotes, createComment, fetchPosts } from '../actions';
 
 import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
 
 class Post extends Component {
     state = {
-        commentsModalOpen: false
+        commentsModalOpen: false,
+        commentAuthor: '',
+        commentBody: ''
     }
     updateVote(vote, postId) {
         this.props.submitVote(vote, postId);
@@ -25,11 +27,33 @@ class Post extends Component {
     showCommentModal() {
         this.setState({ commentsModalOpen: true });
     }
-    closeCommentsModal(){
-        this.setState({ commentsModalOpen: false });
+    closeCommentsModal = () => this.setState({ commentsModalOpen: false });
+    handleInputChange = (e) => {
+        const target = e.target;
+        const name = target.name;
+        const value = target.value;
+        this.setState({[name]: value});
     }
+    submitComment = (e) => {
+        e.preventDefault();
+        const commentData = {
+            id: uuidv4(),
+            timestamp: Date.now(),
+            body: this.state.commentBody,
+            author: this.state.commentAuthor,
+            parentId: this.props.match.params.postId
+        }
+        this.props.addCommentToPost(commentData);
+        this.props.reloadPosts();
+        this.setState({
+            commentsModalOpen: false,
+            commentAuthor: '',
+            commentBody: ''
+        })
+    }
+    
     render() {
-        const { commentsModalOpen } = this.state;
+        const { commentsModalOpen, commentAuthor, commentBody } = this.state;
         const { posts, comments } = this.props;
         const postId = this.props.match.params.postId;
         const post = posts ? posts.filter(post => post.id === postId).pop() : '';
@@ -73,6 +97,27 @@ class Post extends Component {
                 isOpen={commentsModalOpen}
                 onRequestClose={this.closeCommentsModal}
                 contentLabel='Modal'>
+                <h2>Create or edit the comment</h2>
+                <form onSubmit={this.submitComment} className="comment-form">
+                    <label>
+                        Author: 
+                        <input 
+                            type="text" 
+                            value={commentAuthor}
+                            onChange={this.handleInputChange}
+                            name="commentAuthor" />
+                    </label>
+                    <label>
+                        Comment: 
+                        <textarea 
+                            name="commentBody"
+                            value={commentBody}
+                            onChange={this.handleInputChange}
+                            rows="10"
+                            cols="50"/>
+                    </label>
+                    <button className="submit-comment" type="submit">Submit</button>
+                </form>
                 <button className="closeModal" onClick={() => this.closeCommentsModal()}>X</button>
             </Modal>
             </div>
@@ -91,7 +136,9 @@ function mapDispatchToProps(dispatch) {
     return {
         getComments: (postId) => dispatch(fetchPostComments(postId)),
         submitVote: (vote, postId) => dispatch(updatePostVotes(vote, postId)),
-        submitCommentVote: (vote, commentId) => dispatch(updateCommentVotes(vote, commentId))
+        submitCommentVote: (vote, commentId) => dispatch(updateCommentVotes(vote, commentId)),
+        addCommentToPost: (commentData) => dispatch(createComment(commentData)),
+        reloadPosts: () => dispatch(fetchPosts())
     }
 }
 
