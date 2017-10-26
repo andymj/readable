@@ -15,7 +15,8 @@ function get(url) {
 }
 
 function post(url, option) {
-    return fetch(url, { method: 'POST', headers, body: JSON.stringify({ option }) })
+    const body = typeof option === 'string' ? { option } : { ...option }
+    return fetch(url, { method: 'POST', headers, body: JSON.stringify(body) })
         .then( res => res.json())
         .then(data => data);
 }
@@ -42,4 +43,8 @@ export function updateVote(vote, postId) {
 
 export function updateCommentVote(vote, commentId) {
     return post(`${url}/comments/${commentId}`, vote);
+}
+
+export function addCommentToPost(data) {
+    return post(`${url}/comments`, data)
 }
