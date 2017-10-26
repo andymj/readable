@@ -6,7 +6,8 @@ export const SORT_BY_DATE = 'SORT_BY_DATE';
 export const SORT_BY_VOTES = 'SORT_BY_VOTES';
 export const GET_POST_COMMENTS = 'GET_POST_COMMENTS'
 export const UPDATE_POST = 'UPDATE_POST';
-export const UPDATE_COMMENT = 'UPDATE_COMMENT';
+export const UPDATE_COMMENT = 'UPDATE_COMMENT'
+export const CREATE_COMMENT = 'CREATE_COMMENT';
 
 export const getPosts = (posts) => ({
     type: GET_POSTS,
@@ -59,6 +60,11 @@ export const updateComment = (comment) => ({
     comment
 })
 
+export const addCommentToPost = (comment) => ({
+    type: CREATE_COMMENT,
+    comment
+})
+
 export function updatePostVotes(vote, postId) {
     return (dispatch) => {
         readableAPI.updateVote(vote, postId).then(response => {
@@ -79,6 +85,14 @@ export function fetchCategories() {
     return (dispatch) => {
         readableAPI.getCategories().then(response => {
             dispatch(getCategories(response));
+        });
+    }
+}
+
+export function createComment(commentData) {
+    return (dispatch) => {
+        readableAPI.addCommentToPost(commentData).then(response => {
+            dispatch(addCommentToPost(response));
         });
     }
 }

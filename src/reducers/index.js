@@ -7,7 +7,8 @@ import {
     SORT_BY_VOTES,
     GET_POST_COMMENTS,
     UPDATE_POST,
-    UPDATE_COMMENT } from '../actions';
+    UPDATE_COMMENT,
+    CREATE_COMMENT } from '../actions';
 
 const initialPosts = null;
 
@@ -46,12 +47,11 @@ function categories(state=null, action) {
 }
 
 function comments(state=[], action) {
+    const { comments, comment } = action;
     switch (action.type) {
         case GET_POST_COMMENTS :
-            const { comments } = action
             return [...comments].sort((a, b) => (b.voteScore - a.voteScore));
         case UPDATE_COMMENT :
-            const { comment } = action;
             return [
                 ...state.map((item)=> {
                     if( item.id === comment.id) {
@@ -60,6 +60,11 @@ function comments(state=[], action) {
                     return item;
                 }).sort((a, b) => (b.voteScore - a.voteScore))
             ];
+        case CREATE_COMMENT :
+            return [
+                ...state,
+                comment
+            ].sort((a, b) => (b.voteScore - a.voteScore));
         default :
             return state;
     }
