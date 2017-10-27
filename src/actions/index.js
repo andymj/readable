@@ -7,7 +7,7 @@ export const SORT_BY_VOTES = 'SORT_BY_VOTES';
 export const GET_POST_COMMENTS = 'GET_POST_COMMENTS'
 export const UPDATE_POST = 'UPDATE_POST';
 export const UPDATE_COMMENT = 'UPDATE_COMMENT'
-export const CREATE_COMMENT = 'CREATE_COMMENT';
+export const CREATE_COMMENT = 'CREATE_COMMENT'
 
 export const getPosts = (posts) => ({
     type: GET_POSTS,
@@ -76,6 +76,14 @@ export function updatePostVotes(vote, postId) {
 export function updateCommentVotes(vote, commentId) {
     return (dispatch) => {
         readableAPI.updateCommentVote(vote, commentId).then(response => {
+            dispatch(updateComment(response));
+        });
+    }
+}
+
+export function editComment(commentId, commentData) {
+    return (dispatch) => {
+        readableAPI.editComment(commentData, commentId).then(response => {
             dispatch(updateComment(response));
         });
     }
