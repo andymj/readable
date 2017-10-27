@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import Modal from 'react-modal'
 import uuidv4 from 'uuid/v4';
 
-import { fetchPostComments, updatePostVotes, updateCommentVotes, createComment, fetchPosts } from '../actions';
+import { fetchPostComments,
+        updatePostVotes,
+        updateCommentVotes,
+        createComment,
+        fetchPosts,
+        editComment } from '../actions';
 
 import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
@@ -12,7 +17,9 @@ class Post extends Component {
     state = {
         commentsModalOpen: false,
         commentAuthor: '',
-        commentBody: ''
+        commentBody: '',
+        commentId: '',
+        updateComment: false
     }
     updateVote(vote, postId) {
         this.props.submitVote(vote, postId);
@@ -27,7 +34,13 @@ class Post extends Component {
     showCommentModal() {
         this.setState({ commentsModalOpen: true });
     }
-    closeCommentsModal = () => this.setState({ commentsModalOpen: false });
+    closeCommentsModal = () => this.setState({
+        updateComment: false,
+        commentsModalOpen: false,
+        commentAuthor: '',
+        commentBody: '',
+        commentId: '' 
+    });
     handleInputChange = (e) => {
         const target = e.target;
         const name = target.name;
@@ -36,24 +49,44 @@ class Post extends Component {
     }
     submitComment = (e) => {
         e.preventDefault();
-        const commentData = {
-            id: uuidv4(),
-            timestamp: Date.now(),
-            body: this.state.commentBody,
-            author: this.state.commentAuthor,
-            parentId: this.props.match.params.postId
+        let commentData = {};
+        if( !this.state.updateComment ) {
+            commentData = {
+                id: uuidv4(),
+                timestamp: Date.now(),
+                body: this.state.commentBody,
+                author: this.state.commentAuthor,
+                parentId: this.props.match.params.postId
+            }
+            this.props.addCommentToPost(commentData);
+        } else {
+            commentData = {
+                timestamp: Date.now(),
+                body: this.state.commentBody,
+            }
+            this.props.editComment(this.state.commentId, commentData);
         }
-        this.props.addCommentToPost(commentData);
         this.props.reloadPosts();
         this.setState({
             commentsModalOpen: false,
             commentAuthor: '',
-            commentBody: ''
+            commentBody: '',
+            commentId: ''
+        })
+    }
+    editComment = (event, comment) => {
+        event.preventDefault();
+        this.setState({
+            commentBody: comment.body,
+            commentId: comment.id,
+            timestamp: Date.now(),
+            commentsModalOpen: true,
+            updateComment: true
         })
     }
     
     render() {
-        const { commentsModalOpen, commentAuthor, commentBody } = this.state;
+        const { commentsModalOpen, commentAuthor, commentBody, updateComment } = this.state;
         const { posts, comments } = this.props;
         const postId = this.props.match.params.postId;
         const post = posts ? posts.filter(post => post.id === postId).pop() : '';
@@ -79,6 +112,7 @@ class Post extends Component {
                         { comments.length > 0 && <h3 className="comments-title">Comments</h3>}
                         { comments.length > 0 && comments.map( comment => (
                             <div className="comment" key={comment.id}>
+                                <div><button onClick={(event) => this.editComment(event, comment)} className="edit-comment">Edit</button><button className="delete-comment">Delete</button></div>
                                 <div className="comment-info">
                                     <span>by: {comment.author}</span>
                                     <span>Created: {moment(comment.timestamp).calendar()}</span>
@@ -99,6 +133,7 @@ class Post extends Component {
                 contentLabel='Modal'>
                 <h2>Create or edit the comment</h2>
                 <form onSubmit={this.submitComment} className="comment-form">
+                { !updateComment && 
                     <label>
                         Author: 
                         <input 
@@ -107,6 +142,7 @@ class Post extends Component {
                             onChange={this.handleInputChange}
                             name="commentAuthor" />
                     </label>
+                }
                     <label>
                         Comment: 
                         <textarea 
@@ -138,7 +174,8 @@ function mapDispatchToProps(dispatch) {
         submitVote: (vote, postId) => dispatch(updatePostVotes(vote, postId)),
         submitCommentVote: (vote, commentId) => dispatch(updateCommentVotes(vote, commentId)),
         addCommentToPost: (commentData) => dispatch(createComment(commentData)),
-        reloadPosts: () => dispatch(fetchPosts())
+        reloadPosts: () => dispatch(fetchPosts()),
+        editComment: (commentId, commentData) => dispatch(editComment(commentId, commentData))
     }
 }
 

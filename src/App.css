@@ -116,6 +116,7 @@ article {
 .comment-info {
 	font-size: 13px;
 	color: gray;
+	margin-top: 15px;
 }
 
 .post-info span, .comment-info span {
@@ -253,4 +254,29 @@ button.submit-comment:hover{
 
 button {
 	cursor: pointer;
+}
+
+.edit-comment {
+	margin-right: 5px;
+	background-color: #7e7e7e;
+	color: white;
+	border-color: #7e7e7e;
+	border-radius: 5px;
+}
+
+.edit-comment:hover {
+	background-color: #a09e9e;
+	border-color: #a09e9e;
+}
+
+.delete-comment {
+	background-color: #9e0000;
+	color: white;
+	border-color: #9e0000;
+	border-radius: 5px;
+}
+
+.delete-comment:hover {
+	background-color: #c70101;
+	border-color: #c70101;
 }
