@@ -21,6 +21,12 @@ function post(url, option) {
         .then(data => data);
 }
 
+function put(url, data) {
+    return fetch(url, { method: 'PUT', headers, body: JSON.stringify(data) })
+        .then(res => res.json())
+        .then(data => data);
+}
+
 export function getAllPosts() {
     return get(`${url}/${posts}`);
 }
@@ -47,4 +53,8 @@ export function updateCommentVote(vote, commentId) {
 
 export function addCommentToPost(data) {
     return post(`${url}/comments`, data)
+}
+
+export function editComment(commentData, commentId) {
+    return put(`${url}/comments/${commentId}`, commentData)
 }
