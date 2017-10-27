@@ -55,7 +55,7 @@ function comments(state=[], action) {
             return [
                 ...state.map((item)=> {
                     if( item.id === comment.id) {
-                        item.voteScore = comment.voteScore;
+                        return comment;
                     }
                     return item;
                 }).sort((a, b) => (b.voteScore - a.voteScore))
