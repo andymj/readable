@@ -71,7 +71,8 @@ class Post extends Component {
             commentsModalOpen: false,
             commentAuthor: '',
             commentBody: '',
-            commentId: ''
+            commentId: '',
+            updateComment: false
         })
     }
     editComment = (event, comment) => {
