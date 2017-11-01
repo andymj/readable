@@ -8,7 +8,8 @@ import { fetchPostComments,
         updateCommentVotes,
         createComment,
         fetchPosts,
-        editComment } from '../actions';
+        editComment,
+        deleteComment } from '../actions';
 
 import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
@@ -20,6 +21,15 @@ class Post extends Component {
         commentBody: '',
         commentId: '',
         updateComment: false
+    }
+    resetCommentState() {
+        this.setState({
+            updateComment: false,
+            commentsModalOpen: false,
+            commentAuthor: '',
+            commentBody: '',
+            commentId: '' 
+        })
     }
     updateVote(vote, postId) {
         this.props.submitVote(vote, postId);
@@ -34,13 +44,7 @@ class Post extends Component {
     showCommentModal() {
         this.setState({ commentsModalOpen: true });
     }
-    closeCommentsModal = () => this.setState({
-        updateComment: false,
-        commentsModalOpen: false,
-        commentAuthor: '',
-        commentBody: '',
-        commentId: '' 
-    });
+    closeCommentsModal = () => this.resetCommentState();
     handleInputChange = (e) => {
         const target = e.target;
         const name = target.name;
@@ -67,13 +71,7 @@ class Post extends Component {
             this.props.editComment(this.state.commentId, commentData);
         }
         this.props.reloadPosts();
-        this.setState({
-            commentsModalOpen: false,
-            commentAuthor: '',
-            commentBody: '',
-            commentId: '',
-            updateComment: false
-        })
+        this.resetCommentState();
     }
     editComment = (event, comment) => {
         event.preventDefault();
@@ -84,6 +82,10 @@ class Post extends Component {
             commentsModalOpen: true,
             updateComment: true
         })
+    }
+    deleteComment = (commentId, postId) => {
+        this.props.removeComment(commentId, postId);
+        this.props.reloadPosts();
     }
     
     render() {
@@ -113,7 +115,7 @@ class Post extends Component {
                         { comments.length > 0 && <h3 className="comments-title">Comments</h3>}
                         { comments.length > 0 && comments.map( comment => (
                             <div className="comment" key={comment.id}>
-                                <div><button onClick={(event) => this.editComment(event, comment)} className="edit-comment">Edit</button><button className="delete-comment">Delete</button></div>
+                                <div><button onClick={(event) => this.editComment(event, comment)} className="edit-comment">Edit</button><button onClick={() => this.deleteComment(comment.id, postId)} className="delete-comment">Delete</button></div>
                                 <div className="comment-info">
                                     <span>by: {comment.author}</span>
                                     <span>Created: {moment(comment.timestamp).calendar()}</span>
@@ -176,7 +178,8 @@ function mapDispatchToProps(dispatch) {
         submitCommentVote: (vote, commentId) => dispatch(updateCommentVotes(vote, commentId)),
         addCommentToPost: (commentData) => dispatch(createComment(commentData)),
         reloadPosts: () => dispatch(fetchPosts()),
-        editComment: (commentId, commentData) => dispatch(editComment(commentId, commentData))
+        editComment: (commentId, commentData) => dispatch(editComment(commentId, commentData)),
+        removeComment: (commentId, postId) => dispatch(deleteComment(commentId, postId))
     }
 }
 

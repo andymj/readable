@@ -27,6 +27,12 @@ function put(url, data) {
         .then(data => data);
 }
 
+function remove(url, id) {
+    return fetch(url, { method: 'DELETE', headers })
+        .then(res => res.json())
+        .then(data => data);
+}
+
 export function getAllPosts() {
     return get(`${url}/${posts}`);
 }
@@ -52,9 +58,13 @@ export function updateCommentVote(vote, commentId) {
 }
 
 export function addCommentToPost(data) {
-    return post(`${url}/comments`, data)
+    return post(`${url}/comments`, data);
 }
 
 export function editComment(commentData, commentId) {
-    return put(`${url}/comments/${commentId}`, commentData)
+    return put(`${url}/comments/${commentId}`, commentData);
+}
+
+export function deleteComment(commentId) {
+    return remove(`${url}/comments/${commentId}`);
 }

@@ -89,6 +89,14 @@ export function editComment(commentId, commentData) {
     }
 }
 
+export function deleteComment(commentId, postId) {
+    return (dispatch) => {
+        readableAPI.deleteComment(commentId).then(response => {
+            dispatch(fetchPostComments(postId));
+        });
+    }
+}
+
 export function fetchCategories() {
     return (dispatch) => {
         readableAPI.getCategories().then(response => {
