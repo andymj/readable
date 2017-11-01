@@ -96,7 +96,7 @@ class Post extends Component {
 
         return (
             <div className="post-wrapper">
-            {post &&
+            {post ?
                 <article className="single-post"> 
                     <header className="post-header">
                         <h2 className="post-title">{ post.title }</h2>
@@ -126,7 +126,7 @@ class Post extends Component {
                         ))
                         }
                     </div>
-                </article>
+                </article> :  <h2>Sorry Post doesn't exist</h2>
             }
             <Modal
                 className='modal'
@@ -134,7 +134,7 @@ class Post extends Component {
                 isOpen={commentsModalOpen}
                 onRequestClose={this.closeCommentsModal}
                 contentLabel='Modal'>
-                <h2>Create or edit the comment</h2>
+                <h2>{updateComment ? "Edit" : "Create a new"} comment</h2>
                 <form onSubmit={this.submitComment} className="comment-form">
                 { !updateComment && 
                     <label>
