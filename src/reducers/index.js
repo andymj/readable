@@ -8,12 +8,13 @@ import {
     GET_POST_COMMENTS,
     UPDATE_POST,
     UPDATE_COMMENT,
-    CREATE_COMMENT } from '../actions';
+    CREATE_COMMENT,
+    CREATE_POST } from '../actions';
 
 const initialPosts = null;
 
 function posts(state=initialPosts, action) {
-    const { posts } = action;
+    const { posts, post } = action;
     switch (action.type){
         case GET_POSTS :
             return [...posts].filter( post => post.deleted === false ).sort((a, b) => (b.voteScore - a.voteScore));
@@ -22,7 +23,6 @@ function posts(state=initialPosts, action) {
         case SORT_BY_VOTES :
             return [...posts].sort((a, b) => ( b.voteScore - a.voteScore));
         case UPDATE_POST :
-            const { post } = action;
             return [
                 ...state.map((item) => {
                     if(item.id === post.id) {
@@ -31,6 +31,11 @@ function posts(state=initialPosts, action) {
                     return item;
                 }).filter(post => post.deleted === false).sort((a, b) => (b.voteScore - a.voteScore))
             ]
+        case CREATE_POST :
+            return [
+                ...state,
+                post
+            ];
         default :
             return state;
     }

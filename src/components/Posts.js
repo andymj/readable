@@ -1,17 +1,86 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Modal from 'react-modal';
+import uuidv4 from 'uuid/v4';
 
-import { updatePostVotes } from '../actions'
+import { updatePostVotes, submitPost } from '../actions'
 
 import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
 
 class Posts extends Component {
+    state = {
+        postModalOpen: false,
+        postAuthor: '',
+        postTitle: '',
+        postBody: '',
+        postCategory: '',
+        postId: '',
+        updatePost: false
+    }
+    postModalOpen = () => {
+        this.setState({
+            postModalOpen: true
+        })
+    }
+    closePostModal = () => {
+        this.resetPostForm();
+    }
+    resetPostForm() {
+        this.setState({
+            postModalOpen: false,
+            postAuthor: '',
+            postTitle: '',
+            postCategory: '',
+            postBody: '',
+            postId: '',
+            updatePost: false
+        })
+    }
+    editPost(post) {
+        this.setState({
+            postTitle: post.title,
+            postBody: post.body,
+            postId: post.id,
+            updatePost: true,
+            postModalOpen: true
+        })
+    }
+    submitForm = (e) => {
+        e.preventDefault();
+        let postData = {};
+        if (!this.state.updatePost) {
+            postData = {
+                id: uuidv4(),
+                timestamp: Date.now(),
+                body: this.state.postBody,
+                author: this.state.postAuthor,
+                title: this.state.postTitle,
+                category: this.state.postCategory
+            }
+            this.props.submitPost(postData);
+        } else {
+            postData = {
+                title: this.state.postTitle,
+                body: this.state.postBody,
+            }
+            // this.props.editComment(this.state.commentId, postData);
+        }
+        // this.props.reloadPosts();
+        this.closePostModal();
+    }
+    handleInputChange = (e) => {
+        const target = e.target;
+        const name = target.name;
+        const value = target.value;
+        this.setState({ [name]: value });
+    }
     updateVote(vote, postId) {
         this.props.submitVote(vote, postId);
     }
     render() {
+        let { postModalOpen, postTitle, postCategory, postAuthor, postBody, postId, updatePost } = this.state;
         let { posts } = this.props;
         const category = this.props.match.params.category;
         posts = category && posts ? posts.filter( post => post.category === category ) : posts;
@@ -19,6 +88,7 @@ class Posts extends Component {
         return (
             <section className="posts">
                 <h2>Posts</h2>
+                <button onClick={this.postModalOpen} className="add-new-post">Add a new post <span className="plus-icon">+</span></button>
                 {!!posts ? posts.map(post => {
                     let body = post.body.substring(0, 60);
                     body = body.length >= 60 ? `${body}...` : body;
@@ -38,9 +108,63 @@ class Posts extends Component {
                             <span>Created: {moment(post.timestamp).calendar()}</span>
                             <span>Category: #{post.category}</span>
                             <span>Total comments: {post.commentCount}</span>
+                            <button onClick={() => this.editPost(post)}>Edit</button>
+                            <button>Delete</button>
                         </footer>
                     </article>;
                 }) : "Loading ..."}
+                <Modal
+                    className='modal'
+                    overlayClassName='overlay'
+                    isOpen={postModalOpen}
+                    onRequestClose={this.closePostModal}
+                    contentLabel='Modal'>
+                    <h2>{ updatePost ? "Edit" : "Create a new" } Post</h2>
+                    <form onSubmit={this.submitForm} className="post-form">
+                        {!updatePost &&
+                        <div>
+                            <label>
+                                Author:
+                                <input
+                                    type="text"
+                                    value={postAuthor}
+                                    onChange={this.handleInputChange}
+                                    name="postAuthor" />
+                            </label>
+                            <label>
+                                Select a category:
+                                <select 
+                                    name="postCategory" 
+                                    value={postCategory} 
+                                    onChange={this.handleInputChange}>
+                                    <option value="react">React</option>
+                                    <option value="redux">Redux</option>
+                                    <option value="udacity">Udacity</option>
+                                </select>
+                            </label>
+                        </div>
+                        }
+                        <label>
+                            Title:
+                            <input
+                                type="text"
+                                value={postTitle}
+                                onChange={this.handleInputChange}
+                                name="postTitle" />
+                        </label>
+                        <label>
+                            Content:
+                            <textarea
+                                name="postBody"
+                                value={postBody}
+                                onChange={this.handleInputChange}
+                                rows="10"
+                                cols="50" />
+                        </label>
+                        <button className="submit-post" type="submit">Submit</button>
+                    </form>
+                    <button className="closeModal" onClick={() => this.closePostModal()}>X</button>
+                </Modal>
             </section>
         )
     }
@@ -54,7 +178,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        submitVote: (vote, postId) => dispatch(updatePostVotes(vote, postId))
+        submitVote: (vote, postId) => dispatch(updatePostVotes(vote, postId)),
+        submitPost: (data) => dispatch(submitPost(data))
     }
 }
 

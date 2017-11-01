@@ -9,7 +9,6 @@ class Sidenav extends Component {
         const {categories, posts } = this.props;
         return (
             <aside className="categories">
-                <button className="add-new-post">Add a new post <span className="plus-icon">+</span></button>
                 <section>
                     <h2>Categories</h2>
                     <ul>

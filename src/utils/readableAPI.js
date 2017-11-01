@@ -68,3 +68,7 @@ export function editComment(commentData, commentId) {
 export function deleteComment(commentId) {
     return remove(`${url}/comments/${commentId}`);
 }
+
+export function createPost(postData) {
+    return post(`${url}/posts`, postData);
+}
