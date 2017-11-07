@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Modal from 'react-modal';
 import uuidv4 from 'uuid/v4';
 
-import { updatePostVotes, submitPost } from '../actions'
+import { updatePostVotes, submitPost, editPost, deletePost } from '../actions'
 
 import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
@@ -38,7 +38,7 @@ class Posts extends Component {
             updatePost: false
         })
     }
-    editPost(post) {
+    editPostHandler(post) {
         this.setState({
             postTitle: post.title,
             postBody: post.body,
@@ -65,7 +65,8 @@ class Posts extends Component {
                 title: this.state.postTitle,
                 body: this.state.postBody,
             }
-            // this.props.editComment(this.state.commentId, postData);
+            // TODO: add action to update editted post.
+            this.props.editPost(postData, this.state.postId);
         }
         // this.props.reloadPosts();
         this.closePostModal();
@@ -89,7 +90,7 @@ class Posts extends Component {
             <section className="posts">
                 <h2>Posts</h2>
                 <button onClick={this.postModalOpen} className="add-new-post">Add a new post <span className="plus-icon">+</span></button>
-                {!!posts ? posts.map(post => {
+                {!!posts && posts.length > 0 ? posts.map(post => {
                     let body = post.body.substring(0, 60);
                     body = body.length >= 60 ? `${body}...` : body;
 
@@ -108,11 +109,11 @@ class Posts extends Component {
                             <span>Created: {moment(post.timestamp).calendar()}</span>
                             <span>Category: #{post.category}</span>
                             <span>Total comments: {post.commentCount}</span>
-                            <button onClick={() => this.editPost(post)}>Edit</button>
-                            <button>Delete</button>
+                            <button onClick={() => this.editPostHandler(post)}>Edit</button>
+                            <button onClick={() => this.props.deletePost(post.id)}>Delete</button>
                         </footer>
                     </article>;
-                }) : "Loading ..."}
+                }) : <h2>No Posts found! :-(</h2>}
                 <Modal
                     className='modal'
                     overlayClassName='overlay'
@@ -179,7 +180,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         submitVote: (vote, postId) => dispatch(updatePostVotes(vote, postId)),
-        submitPost: (data) => dispatch(submitPost(data))
+        submitPost: (data) => dispatch(submitPost(data)),
+        editPost: (data, postId) => dispatch(editPost(data, postId)),
+        deletePost: (postId) => dispatch(deletePost(postId))
     }
 }
 

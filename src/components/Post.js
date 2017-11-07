@@ -9,7 +9,10 @@ import { fetchPostComments,
         createComment,
         fetchPosts,
         editComment,
-        deleteComment } from '../actions';
+        deleteComment,
+        submitPost, 
+        editPost, 
+        deletePost } from '../actions';
 
 import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
@@ -20,7 +23,14 @@ class Post extends Component {
         commentAuthor: '',
         commentBody: '',
         commentId: '',
-        updateComment: false
+        updateComment: false,
+        postModalOpen: false,
+        postAuthor: '',
+        postTitle: '',
+        postBody: '',
+        postCategory: '',
+        postId: '',
+        updatePost: false
     }
     resetCommentState() {
         this.setState({
@@ -87,9 +97,63 @@ class Post extends Component {
         this.props.removeComment(commentId, postId);
         this.props.reloadPosts();
     }
+
+    postModalOpen = () => {
+        this.setState({
+            postModalOpen: true
+        })
+    }
+    closePostModal = () => {
+        this.resetPostForm();
+    }
+    resetPostForm() {
+        this.setState({
+            postModalOpen: false,
+            postAuthor: '',
+            postTitle: '',
+            postCategory: '',
+            postBody: '',
+            postId: '',
+            updatePost: false
+        })
+    }
+    editPostHandler(post) {
+        this.setState({
+            postTitle: post.title,
+            postBody: post.body,
+            postId: post.id,
+            updatePost: true,
+            postModalOpen: true
+        })
+    }
+    submitForm = (e) => {
+        e.preventDefault();
+        let postData = {};
+        if (!this.state.updatePost) {
+            postData = {
+                id: uuidv4(),
+                timestamp: Date.now(),
+                body: this.state.postBody,
+                author: this.state.postAuthor,
+                title: this.state.postTitle,
+                category: this.state.postCategory
+            }
+            this.props.submitPost(postData);
+        } else {
+            postData = {
+                title: this.state.postTitle,
+                body: this.state.postBody,
+            }
+            // TODO: add action to update editted post.
+            this.props.editPost(postData, this.state.postId);
+        }
+        // this.props.reloadPosts();
+        this.closePostModal();
+    }
     
     render() {
         const { commentsModalOpen, commentAuthor, commentBody, updateComment } = this.state;
+        let { postModalOpen, postTitle, postCategory, postAuthor, postBody, updatePost } = this.state;
         const { posts, comments } = this.props;
         const postId = this.props.match.params.postId;
         const post = posts ? posts.filter(post => post.id === postId).pop() : '';
@@ -99,6 +163,7 @@ class Post extends Component {
             {post ?
                 <article className="single-post"> 
                     <header className="post-header">
+                            <button onClick={this.postModalOpen} className="add-new-post">Add a new post <span className="plus-icon">+</span></button>
                         <h2 className="post-title">{ post.title }</h2>
                         <div className="post-info">
                             <span>by: {post.author}</span>
@@ -109,6 +174,8 @@ class Post extends Component {
                     <div className="post-info body-footer">
                         <span>Created: {moment(post.timestamp).calendar()}</span>
                         <span>Category: #{post.category}</span>
+                        <button onClick={() => this.editPostHandler(post)}>Edit</button>
+                        <button onClick={() => this.props.deletePost(post.id)}>Delete</button>
                     </div>
                     <div className="comments">
                         <button className="newComment" onClick={() => this.showCommentModal()}>Add a new comment +</button>
@@ -159,6 +226,58 @@ class Post extends Component {
                 </form>
                 <button className="closeModal" onClick={() => this.closeCommentsModal()}>X</button>
             </Modal>
+            <Modal
+                className='modal'
+                overlayClassName='overlay'
+                isOpen={postModalOpen}
+                onRequestClose={this.closePostModal}
+                contentLabel='Modal'>
+                <h2>{updatePost ? "Edit" : "Create a new"} Post</h2>
+                <form onSubmit={this.submitForm} className="post-form">
+                    {!updatePost &&
+                        <div>
+                            <label>
+                                Author:
+                                <input
+                                    type="text"
+                                    value={postAuthor}
+                                    onChange={this.handleInputChange}
+                                    name="postAuthor" />
+                            </label>
+                            <label>
+                                Select a category:
+                                <select
+                                    name="postCategory"
+                                    value={postCategory}
+                                    onChange={this.handleInputChange}>
+                                    <option value="react">React</option>
+                                    <option value="redux">Redux</option>
+                                    <option value="udacity">Udacity</option>
+                                </select>
+                            </label>
+                        </div>
+                    }
+                    <label>
+                        Title:
+                            <input
+                            type="text"
+                            value={postTitle}
+                            onChange={this.handleInputChange}
+                            name="postTitle" />
+                    </label>
+                    <label>
+                        Content:
+                            <textarea
+                            name="postBody"
+                            value={postBody}
+                            onChange={this.handleInputChange}
+                            rows="10"
+                            cols="50" />
+                    </label>
+                    <button className="submit-post" type="submit">Submit</button>
+                </form>
+                <button className="closeModal" onClick={() => this.closePostModal()}>X</button>
+            </Modal>
             </div>
         );
     }
@@ -179,7 +298,10 @@ function mapDispatchToProps(dispatch) {
         addCommentToPost: (commentData) => dispatch(createComment(commentData)),
         reloadPosts: () => dispatch(fetchPosts()),
         editComment: (commentId, commentData) => dispatch(editComment(commentId, commentData)),
-        removeComment: (commentId, postId) => dispatch(deleteComment(commentId, postId))
+        removeComment: (commentId, postId) => dispatch(deleteComment(commentId, postId)),
+        submitPost: (data) => dispatch(submitPost(data)),
+        editPost: (data, postId) => dispatch(editPost(data, postId)),
+        deletePost: (postId) => dispatch(deletePost(postId))
     }
 }
 

@@ -26,7 +26,7 @@ function posts(state=initialPosts, action) {
             return [
                 ...state.map((item) => {
                     if(item.id === post.id) {
-                        item.voteScore = post.voteScore;
+                        return post;
                     }
                     return item;
                 }).filter(post => post.deleted === false).sort((a, b) => (b.voteScore - a.voteScore))

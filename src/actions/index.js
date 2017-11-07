@@ -43,6 +43,22 @@ export function submitPost(postData) {
     }
 }
 
+export function editPost(postData, postId) {
+    return (dispatch) => {
+        readableAPI.editPost(postData, postId).then(response => {
+            dispatch(updatePost(response));
+        });
+    }
+}
+
+export function deletePost(postId) {
+    return (dispatch) => {
+        readableAPI.deletePost(postId).then(response => {
+            dispatch(updatePost(response));
+        });
+    }
+}
+
 export function fetchPostComments(postId) {
     return (dispatch) => {
         readableAPI.getPostComments(postId).then(response => {
