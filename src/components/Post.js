@@ -174,15 +174,17 @@ class Post extends Component {
                     <div className="post-info body-footer">
                         <span>Created: {moment(post.timestamp).calendar()}</span>
                         <span>Category: #{post.category}</span>
-                        <button onClick={() => this.editPostHandler(post)}>Edit</button>
-                        <button onClick={() => this.props.deletePost(post.id)}>Delete</button>
+                        <span>
+                            <button className="edit" onClick={() => this.editPostHandler(post)}>Edit</button>
+                            <button className="delete" onClick={() => this.props.deletePost(post.id)}>Delete</button>
+                        </span>
                     </div>
                     <div className="comments">
                         <button className="newComment" onClick={() => this.showCommentModal()}>Add a new comment +</button>
                         { comments.length > 0 && <h3 className="comments-title">Comments</h3>}
                         { comments.length > 0 && comments.map( comment => (
                             <div className="comment" key={comment.id}>
-                                <div><button onClick={(event) => this.editComment(event, comment)} className="edit-comment">Edit</button><button onClick={() => this.deleteComment(comment.id, postId)} className="delete-comment">Delete</button></div>
+                                <div><button onClick={(event) => this.editComment(event, comment)} className="edit">Edit</button><button onClick={() => this.deleteComment(comment.id, postId)} className="delete">Delete</button></div>
                                 <div className="comment-info">
                                     <span>by: {comment.author}</span>
                                     <span>Created: {moment(comment.timestamp).calendar()}</span>

@@ -109,8 +109,10 @@ class Posts extends Component {
                             <span>Created: {moment(post.timestamp).calendar()}</span>
                             <span>Category: #{post.category}</span>
                             <span>Total comments: {post.commentCount}</span>
-                            <button onClick={() => this.editPostHandler(post)}>Edit</button>
-                            <button onClick={() => this.props.deletePost(post.id)}>Delete</button>
+                            <span>
+                                <button className="edit" onClick={() => this.editPostHandler(post)}>Edit</button>
+                                <button className="delete" onClick={() => this.props.deletePost(post.id)}>Delete</button>
+                            </span>
                         </footer>
                     </article>;
                 }) : <h2>No Posts found! :-(</h2>}
