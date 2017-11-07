@@ -162,7 +162,7 @@ class Posts extends Component {
                                 rows="10"
                                 cols="50" />
                         </label>
-                        <button className="submit-post" type="submit">Submit</button>
+                        <button className="submit" type="submit">Submit</button>
                     </form>
                     <button className="closeModal" onClick={() => this.closePostModal()}>X</button>
                 </Modal>

@@ -212,41 +212,36 @@ article {
 	color: rgb(0, 0, 0);
 }
 
-.comment-form {
-	width: 90%;
-	margin: 20px;
-}
-
-.comment-form label{
-	width: 80%;
-	margin: 10px;
+label {
+	margin: 10px 0;
 	display: inline-block;
+	width: 100%;
 }
 
 input {
-	width: 85%;
+	width: 96%;
 	padding: 2%;
 }
 
 textarea {
-	width: 88%;
+	width: 96%;
 	border-color: #dcdbdb;
 	color: gray;
 }
 
-.submit-comment {
+.submit {
 	margin: 10px;
 	width: 100px;
 	padding: 4px 0;
 }
 
-button.submit-comment {
+button.submit {
 	background-color: rgb(0, 87, 128);
 	border-color: rgb(0, 87, 128);
 	color: white;
 }
 
-button.submit-comment:hover{
+button.submit:hover{
 	background-color: rgb(2, 128, 187);
 	border-color: rgb(2, 128, 187);
 	color: white;
