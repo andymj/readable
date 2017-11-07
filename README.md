@@ -3,30 +3,28 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Folder Structure
 
 ```
-my-app/
+  my-app/
 	README.md
 	node_modules/
 	package.json
 	public/
-		index.html
-		favicon.ico
+	  index.html
+	  favicon.ico
 	src/
-		actions/
-			index.js
-		components/
-			App.js
-			Post.js
-			Posts.js
-			Sidenav.js
-		reducers/
-			index.js
-		App.css
-		App.test.js
-		index.css
+	  actions/
 		index.js
+	  components/
+		App.js
+		Post.js
+		Posts.js
+		Sidenav.js
+	  reducers/
+		index.js
+	  App.css
+	  App.test.js
+	  index.css
+	  index.js
 ```
-
-For the project to build, **these files must exist with exact filenames**:
 
 * `public/index.html` is the page template;
 * `src/index.js` is the JavaScript entry point.

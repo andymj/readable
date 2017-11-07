@@ -38,7 +38,7 @@ h1 a {
 }
 
 .categories {
-	height: 100vh;
+	height: auto;
 	border-right: 1px solid rgb(80, 79, 79);
 	padding: 10px 15px 0;
 }
@@ -234,6 +234,17 @@ textarea {
 	margin: 10px;
 	width: 100px;
 	padding: 4px 0;
+}
+
+button.newComment {
+    background: #199e95;
+    color: white;
+	border-color: #199e95;
+}
+
+button.newComment:hover {
+	background: #1ab1a7;
+	border-color: #1ab1a7;
 }
 
 button.submit {
