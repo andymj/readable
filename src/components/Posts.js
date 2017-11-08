@@ -10,6 +10,8 @@ import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
 
 class Posts extends Component {
+
+    // initial state, used only for Form field updates.
     state = {
         postModalOpen: false,
         postAuthor: '',
@@ -27,6 +29,8 @@ class Posts extends Component {
     closePostModal = () => {
         this.resetPostForm();
     }
+
+    // resets the state properties value
     resetPostForm() {
         this.setState({
             postModalOpen: false,
@@ -38,6 +42,9 @@ class Posts extends Component {
             updatePost: false
         })
     }
+
+    // sets the state properties to the value 
+    // of the post to be editted
     editPostHandler(post) {
         this.setState({
             postTitle: post.title,
@@ -47,9 +54,14 @@ class Posts extends Component {
             postModalOpen: true
         })
     }
+
+    // submits form data
     submitForm = (e) => {
         e.preventDefault();
         let postData = {};
+
+        // conditional to submit a post for an update or
+        // to create a new post.
         if (!this.state.updatePost) {
             postData = {
                 id: uuidv4(),
@@ -65,12 +77,13 @@ class Posts extends Component {
                 title: this.state.postTitle,
                 body: this.state.postBody,
             }
-            // TODO: add action to update editted post.
             this.props.editPost(postData, this.state.postId);
         }
-        // this.props.reloadPosts();
+
         this.closePostModal();
     }
+
+    // updates form field value onChange
     handleInputChange = (e) => {
         const target = e.target;
         const name = target.name;

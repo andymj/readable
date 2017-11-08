@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import { Route } from 'react-router'
 
 import "../App.css";
-
-// import { push } from 'react-router-redux'
-import { Route } from 'react-router'
 
 import Posts from './Posts';
 import Sidenav from './Sidenav';

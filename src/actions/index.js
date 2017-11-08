@@ -10,6 +10,8 @@ export const UPDATE_COMMENT = 'UPDATE_COMMENT';
 export const CREATE_COMMENT = 'CREATE_COMMENT';
 export const CREATE_POST = 'CREATE_POST';
 
+// Action functions don't need a lot of explanation
+// they are self descriptive, for the kind of action expected
 export const getPosts = (posts) => ({
     type: GET_POSTS,
     posts
@@ -56,6 +58,8 @@ export const addCommentToPost = (comment) => ({
     comment
 })
 
+// these functions dispatches actions which are use for asynchronous requests.
+// when the request is done it dispatches the action.
 export function submitPost(postData) {
     return (dispatch) => {
         readableAPI.createPost(postData).then(response => {

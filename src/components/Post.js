@@ -18,6 +18,8 @@ import moment from 'moment/moment.js';
 import 'moment/min/locales.min';
 
 class Post extends Component {
+
+    // initial state used for Form field updates.
     state = {
         commentsModalOpen: false,
         commentAuthor: '',
@@ -32,6 +34,8 @@ class Post extends Component {
         postId: '',
         updatePost: false
     }
+
+    // resets comments properties.
     resetCommentState() {
         this.setState({
             updateComment: false,
@@ -47,6 +51,8 @@ class Post extends Component {
     updateCommentVote(vote, commentId) {
         this.props.submitCommentVote(vote, commentId);
     }
+
+    // after post is mounted render comments.
     componentDidMount() {
         const postId = this.props.match.params.postId;
         this.props.getComments(postId);
@@ -55,15 +61,21 @@ class Post extends Component {
         this.setState({ commentsModalOpen: true });
     }
     closeCommentsModal = () => this.resetCommentState();
+
+    // Handle updates for form field values.
     handleInputChange = (e) => {
         const target = e.target;
         const name = target.name;
         const value = target.value;
         this.setState({[name]: value});
     }
+
+    // submits the data for a comment.
     submitComment = (e) => {
         e.preventDefault();
         let commentData = {};
+
+        // conditional to create ot edit a comment.
         if( !this.state.updateComment ) {
             commentData = {
                 id: uuidv4(),
@@ -83,6 +95,9 @@ class Post extends Component {
         this.props.reloadPosts();
         this.resetCommentState();
     }
+
+    // sets the State property with the comment values 
+    // in order to be editted. and used in a form
     editComment = (event, comment) => {
         event.preventDefault();
         this.setState({
@@ -144,10 +159,8 @@ class Post extends Component {
                 title: this.state.postTitle,
                 body: this.state.postBody,
             }
-            // TODO: add action to update editted post.
             this.props.editPost(postData, this.state.postId);
         }
-        // this.props.reloadPosts();
         this.closePostModal();
     }
     
