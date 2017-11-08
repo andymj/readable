@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Folder Structure
 
 ```
-  my-app/
+my-app/
 	README.md
 	node_modules/
 	package.json
@@ -12,14 +12,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 	  favicon.ico
 	src/
 	  actions/
-		index.js
+			index.js
 	  components/
-		App.js
-		Post.js
-		Posts.js
-		Sidenav.js
+			App.js
+			Post.js
+			Posts.js
+			Sidenav.js
 	  reducers/
-		index.js
+			index.js
+		utils/
+			readableAPI.js
 	  App.css
 	  App.test.js
 	  index.css
@@ -30,7 +32,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 * `src/index.js` is the JavaScript entry point.
 * `src/actions/index.js` has all the actions needed by the store
 * `src/component` has all the Components used for this project.
+* `src/component/App.js` is the main component.
 * `src/reduces/index.js` has all the reducers that the store needs to update it's state.
+* `src/utils/readableAPI.js` API to make server requests.
 
 Only files inside `public` can be used from `public/index.html`.<br>
 
@@ -59,3 +63,10 @@ See the section about [deployment](#deployment) for more information.
 ## Project Back End Dependecy
 This project needs the back end to be running in order to work, otherwise it won't work.<br>
 see [back end link](https://github.com/udacity/reactnd-project-readable-starter)
+* clone the repo on the link above.
+* go to the repo directory.
+* `cd api-server`
+* `npm install`
+* `node server`
+
+**back end server** should be running on port `3001` http://localhost:3001 if you have other service running at that port, you need to stop it.
