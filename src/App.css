@@ -39,6 +39,7 @@ h1 a {
 
 .categories {
 	height: auto;
+	min-height: 100vh;
 	border-right: 1px solid rgb(80, 79, 79);
 	padding: 10px 15px 0;
 }
